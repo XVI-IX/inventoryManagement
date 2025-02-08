@@ -49,6 +49,12 @@ export class Users {
   jobTitle: string;
 
   @Column('varchar')
+  resetToken?: string;
+
+  @Column('datetime')
+  resetTokenExpires?: Date;
+
+  @Column('varchar')
   password: string;
 
   @Column('datetime')
