@@ -54,3 +54,14 @@ export class UpdateUserInput extends PartialType(
   @IsString()
   status?: string;
 }
+
+export class LoginUserPassword {
+  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
