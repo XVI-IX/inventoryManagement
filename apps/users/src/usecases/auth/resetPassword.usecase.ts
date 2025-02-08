@@ -35,9 +35,7 @@ export class ResetPasswordUseCase {
 
       const updatedUser = await this.userRepository.update(
         {
-          where: {
-            email: userWithToken.email,
-          },
+          email: userWithToken.email,
         },
         {
           resetToken: null,

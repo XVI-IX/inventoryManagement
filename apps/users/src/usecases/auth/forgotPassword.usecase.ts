@@ -30,9 +30,7 @@ export class ForgotPasswordUseCase {
 
       const updatedUser = await this.userRepository.update(
         {
-          where: {
-            email: exisitingUser.email,
-          },
+          email: exisitingUser.email,
         },
         {
           resetToken: resetToken,

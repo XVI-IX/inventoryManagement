@@ -10,9 +10,9 @@ export const databaseProviders = [
         host: envConfig.getDatabaseHost(),
         port: envConfig.getDatabasePort(),
         username: envConfig.getDatabaseUser(),
-        password: envConfig.getDatabaseHost(),
+        password: envConfig.getDatabasePassword(),
         database: envConfig.getDatabaseName(),
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        entities: [__dirname + './entities/*.entity.ts'],
         synchronize: true,
       });
 

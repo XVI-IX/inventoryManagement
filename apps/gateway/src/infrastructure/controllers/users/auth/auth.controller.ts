@@ -1,3 +1,4 @@
+import { Public } from '@app/lib/infrastructure/decorators';
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
@@ -12,21 +13,25 @@ export class AuthGatewayController {
   ) {}
 
   @Post()
+  @Public()
   async registerUser(@Body() body: CreateUserInput) {
     return this.usersService.send('registerUser', body);
   }
 
   @Post('/login')
+  @Public()
   async loginUserPassword(@Body() body: LoginUserPassword) {
     return this.usersService.send('loginUserPassword', body);
   }
 
   @Post('/forgot-password')
+  @Public()
   async forgotPassword(@Body() body: { email: string }) {
     return this.usersService.send('forgotPassword', body);
   }
 
   @Post('/reset-password')
+  @Public()
   async resetPassword(@Body() body: { token: string; password: string }) {
     return this.usersService.send('resetPassword', body);
   }

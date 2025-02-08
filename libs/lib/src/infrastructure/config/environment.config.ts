@@ -1,6 +1,8 @@
 import { IEnvironmentInterface } from '@app/lib/domain/config/environment.interface';
-// import { config } from 'dotenv';
+import { config } from 'dotenv';
 import * as env from 'env-var';
+
+config();
 
 class EnviromentConfig implements IEnvironmentInterface {
   getEnvironment(): string {
@@ -24,19 +26,19 @@ class EnviromentConfig implements IEnvironmentInterface {
   }
 
   getDatabaseHost(): string {
-    return env.get('DB_HOST').asString();
+    return env.get('DATABASE_HOST').asString();
   }
   getDatabaseUser(): string {
-    return env.get('DB_USER').asString();
+    return env.get('DATABASE_USER').asString();
   }
   getDatabasePassword(): string {
-    return env.get('DB_PASSWORD').asString();
+    return env.get('DATABASE_PASSWORD').asString();
   }
   getDatabaseName(): string {
-    return env.get('DB_NAME').asString();
+    return env.get('DATABASE_NAME').asString();
   }
   getDatabasePort(): number {
-    return env.get('DB_PORT').asInt();
+    return env.get('DATABASE_PORT').asInt();
   }
   getMicroServiceHost(): string {
     return env.get('MICROSERVICE_HOST').asString();

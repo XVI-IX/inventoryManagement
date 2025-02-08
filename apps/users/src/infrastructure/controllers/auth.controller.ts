@@ -26,7 +26,8 @@ export class AuthController {
 
       return HttpResponse.send<Users>('User registered successfully', user);
     } catch (error) {
-      return HttpResponse.error(error.code, error.message, error.context);
+      // return HttpResponse.error(error.code, error.message, error.context);
+      throw error;
     }
   }
 }
