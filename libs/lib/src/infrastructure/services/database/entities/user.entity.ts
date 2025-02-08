@@ -7,10 +7,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-}
+// export enum UserRole {
+//   ADMIN = 'admin',
+//   USER = 'user',
+// }
 
 export enum StatusEnum {
   ACTIVE = 'active',
@@ -35,12 +35,8 @@ export class Users {
   @Column('varchar')
   email: string;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.USER,
-  })
-  role: string;
+  @Column('varchar')
+  roleId: string;
 
   @Column({
     type: 'enum',
@@ -55,8 +51,11 @@ export class Users {
   @Column('varchar')
   password: string;
 
-  @Column('date')
-  dateHired: Date;
+  @Column('datetime')
+  lastLogin: Date;
+
+  @Column('boolean')
+  tfaEnabled: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
