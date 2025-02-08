@@ -1,5 +1,5 @@
 import { IEnvironmentInterface } from '@app/lib/domain/config/environment.interface';
-import { config } from 'dotenv';
+// import { config } from 'dotenv';
 import * as env from 'env-var';
 
 class EnviromentConfig implements IEnvironmentInterface {
@@ -11,7 +11,7 @@ class EnviromentConfig implements IEnvironmentInterface {
     return env.get('PORT').asInt();
   }
 
-  getMicroservicesPort(): number {
+  getMicroservicePort(): number {
     return env.get('MICROSERVICE_PORT').asInt();
   }
 

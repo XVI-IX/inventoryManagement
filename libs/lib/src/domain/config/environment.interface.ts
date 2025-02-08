@@ -1,6 +1,7 @@
 export interface IEnvironmentInterface {
   getEnvironment(): string;
   getPort(): number;
+  getMicroservicePort(): number;
   getJWTSecret(): string;
   getJWTExpiration(): string;
   getDatabaseHost(): string;

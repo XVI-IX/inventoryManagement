@@ -6,6 +6,7 @@ import { envConfig } from '@app/lib/infrastructure/config/environment.config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@app/lib/infrastructure/guards/auth.guard';
 import { JWTModule } from '@app/lib/infrastructure/services/jwt/jwt.module';
+import { AuthGatewayController } from './infrastructure/controllers/users/auth/auth.controller';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { JWTModule } from '@app/lib/infrastructure/services/jwt/jwt.module';
     ]),
     JWTModule,
   ],
-  controllers: [GatewayController],
+  controllers: [GatewayController, AuthGatewayController],
   providers: [
     {
       provide: APP_GUARD,
