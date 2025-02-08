@@ -36,7 +36,7 @@ export class Users {
   email: string;
 
   @Column('varchar')
-  roleId: string;
+  roleId?: string;
 
   @Column({
     type: 'enum',
@@ -46,7 +46,7 @@ export class Users {
   status: string;
 
   @Column()
-  jobTitle: string;
+  jobTitle?: string;
 
   @Column('varchar')
   resetToken?: string;
@@ -58,9 +58,9 @@ export class Users {
   password: string;
 
   @Column('datetime')
-  lastLogin: Date;
+  lastLogin?: Date;
 
-  @Column('boolean')
+  @Column({ type: 'boolean', default: false })
   tfaEnabled: boolean;
 
   @CreateDateColumn()

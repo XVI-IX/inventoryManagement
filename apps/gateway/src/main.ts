@@ -1,8 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { GatewayModule } from './gateway.module';
+import { INestApplication } from '@nestjs/common';
+import { envConfig } from '@app/lib/infrastructure/config/environment.config';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.create(GatewayModule);
-  await app.listen(process.env.port ?? 3000);
+  const httpGateway = await NestFactory.create<INestApplication>(GatewayModule);
+  await httpGateway.listen(envConfig.getPort());
+
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    GatewayModule,
+    {
+      transport: Transport.TCP,
+      options: {
+        port: envConfig.getMicroServicePort(),
+      },
+    },
+  );
+
+  await app.listen();
 }
 bootstrap();
