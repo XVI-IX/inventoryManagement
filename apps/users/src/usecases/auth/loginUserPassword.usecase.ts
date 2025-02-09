@@ -6,6 +6,7 @@ import {
 import { IUserRepository } from '../../domain/repositories/users.repository';
 import { LoginUserPassword } from '../../infrastructure/common/schema/users.schema';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { cleanUserResponse } from '@app/lib/infrastructure/helpers/helpers';
 
 export class LoginUserPasswordUseCase {
   constructor(
@@ -44,7 +45,7 @@ export class LoginUserPasswordUseCase {
 
       return {
         token,
-        user: existingUser,
+        user: cleanUserResponse(existingUser),
       };
     } catch (error) {
       throw error;
