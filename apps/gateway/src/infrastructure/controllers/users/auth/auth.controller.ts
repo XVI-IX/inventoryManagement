@@ -1,5 +1,5 @@
 import { Public } from '@app/lib/infrastructure/decorators';
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post, Query } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
   CreateUserInput,
@@ -37,7 +37,13 @@ export class AuthGatewayController {
 
   @Post('/reset-password')
   @Public()
-  async resetPassword(@Body() body: { token: string; password: string }) {
-    return this.usersService.send('resetPassword', body);
+  async resetPassword(
+    @Body() body: { password: string },
+    @Query('token') token: string,
+  ) {
+    return this.usersService.send('resetPassword', {
+      password: body.password,
+      token,
+    });
   }
 }

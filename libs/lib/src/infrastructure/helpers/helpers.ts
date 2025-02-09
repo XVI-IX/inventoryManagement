@@ -1,5 +1,5 @@
-import crypto from 'node:crypto';
-import bcrypt from 'bcrypt';
+import * as crypto from 'node:crypto';
+import * as bcrypt from 'bcrypt';
 import { Users } from '../services/database/entities/user.entity';
 
 export const generateResetToken = async (): Promise<string> => {

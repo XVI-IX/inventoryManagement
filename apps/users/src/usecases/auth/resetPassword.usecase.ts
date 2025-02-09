@@ -1,6 +1,6 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 import { IUserRepository } from '../../domain/repositories/users.repository';
-import moment from 'moment';
+import * as moment from 'moment';
 import { IArgonService } from '@app/lib/domain/adapters';
 
 export class ResetPasswordUseCase {
