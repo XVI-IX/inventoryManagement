@@ -4,7 +4,21 @@ import { UsersGeneralUseCaseProxyModule } from './infrastructure/usecase-proxy/u
 import { AuthController } from './infrastructure/controllers/auth.controller';
 
 @Module({
-  imports: [UsersGeneralUseCaseProxyModule.register()],
+  imports: [
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: envConfig.getDatabaseHost(),
+    //   port: envConfig.getDatabasePort(),
+    //   username: envConfig.getDatabaseUser(),
+    //   password: envConfig.getDatabasePassword(),
+    //   database: envConfig.getDatabaseName(),
+    //   entities: [
+    //     __dirname +
+    //       '../../../libs/lib/src/infrastructure/services/database/entities/*.entity.ts',
+    //   ],
+    // }),
+    UsersGeneralUseCaseProxyModule.register(),
+  ],
   controllers: [AuthController],
   providers: [UsersService],
 })

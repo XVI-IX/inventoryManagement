@@ -5,6 +5,7 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { cleanUserResponse } from '@app/lib/infrastructure/helpers/helpers';
 
 export class RegisterUserUseCase {
   constructor(
@@ -33,7 +34,11 @@ export class RegisterUserUseCase {
       user.password = hash;
       const newUser = await this.userRepository.save(user);
 
-      return newUser;
+      delete newUser.password;
+      delete newUser.resetToken;
+      delete newUser.resetTokenExpires;
+
+      return cleanUserResponse(newUser);
     } catch (error) {
       throw error;
     }

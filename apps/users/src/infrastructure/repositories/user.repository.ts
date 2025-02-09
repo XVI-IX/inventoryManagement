@@ -59,10 +59,6 @@ export class UsersRepository implements IUserRepository {
     try {
       const user = await this.usersRepository.findOne(condition);
 
-      if (!user) {
-        throw new BadRequestException('User could not be retrieved');
-      }
-
       return user;
     } catch (error) {
       this.logger.error(error.message);
@@ -76,10 +72,6 @@ export class UsersRepository implements IUserRepository {
   ): Promise<Users> {
     try {
       const user = await this.usersRepository.update(condition, entity);
-
-      if (!user) {
-        throw new BadRequestException('User could not be updated');
-      }
 
       return user as unknown as Users;
     } catch (error) {

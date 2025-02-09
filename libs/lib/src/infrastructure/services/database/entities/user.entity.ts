@@ -48,16 +48,16 @@ export class Users {
   @Column()
   jobTitle?: string;
 
-  @Column('varchar')
+  @Column({ type: 'varchar', default: null })
   resetToken?: string;
 
-  @Column('datetime')
+  @Column({ type: 'datetime', default: null })
   resetTokenExpires?: Date;
 
   @Column('varchar')
   password: string;
 
-  @Column('datetime')
+  @Column({ type: 'datetime', default: null })
   lastLogin?: Date;
 
   @Column({ type: 'boolean', default: false })

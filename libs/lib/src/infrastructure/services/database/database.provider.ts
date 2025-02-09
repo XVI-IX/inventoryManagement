@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { envConfig } from '../../config/environment.config';
+import { Users } from './entities/user.entity';
 
 export const databaseProviders = [
   {
@@ -12,8 +13,8 @@ export const databaseProviders = [
         username: envConfig.getDatabaseUser(),
         password: envConfig.getDatabasePassword(),
         database: envConfig.getDatabaseName(),
-        entities: [__dirname + './entities/*.entity.ts'],
-        synchronize: true,
+        entities: [Users],
+        // synchronize: true,
       });
 
       return dataSource.initialize();

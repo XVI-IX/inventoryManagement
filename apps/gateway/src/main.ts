@@ -13,6 +13,7 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
+        host: envConfig.getMicroServiceHost(),
         port: envConfig.getMicroservicePort(),
       },
     },

@@ -15,7 +15,12 @@ export class AuthGatewayController {
   @Post()
   @Public()
   async registerUser(@Body() body: CreateUserInput) {
-    return this.usersService.send('registerUser', body);
+    try {
+      return this.usersService.send('registerUser', body);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
   @Post('/login')
