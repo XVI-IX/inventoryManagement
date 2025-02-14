@@ -70,6 +70,18 @@ class EnviromentConfig implements IEnvironmentInterface {
   getAnalyticsServicePort(): number {
     return env.get('ANALYTICS_SERVICE_PORT').asInt();
   }
+  getGoogleClientId(): string {
+    return env.get('GOOGLE_CLIENT_ID').asString();
+  }
+  getGoogleCallbackUrl(): string {
+    return env.get('GOOGLE_CALLBACK_URL').asString();
+  }
+  getGoogleClientSecret(): string {
+    return env.get('GOOGLE_CLIENT_SECRET').asString();
+  }
+  getGoogleScope(): string {
+    return env.get('GOOGLE_SCOPE').asString();
+  }
 }
 
 export const envConfig = new EnviromentConfig();

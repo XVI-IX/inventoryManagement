@@ -63,6 +63,11 @@ export class Users {
   @Column({ type: 'boolean', default: false })
   tfaEnabled: boolean;
 
+  @Column({ type: 'varchar', default: null })
+  googleProfileId?: string;
+
+  // @Column({ type: })
+
   @CreateDateColumn()
   createdAt: Date;
 

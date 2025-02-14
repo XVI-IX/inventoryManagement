@@ -19,4 +19,8 @@ export interface IEnvironmentInterface {
   getProductServicePort(): number;
   getRbacServicePort(): number;
   getAnalyticsServicePort(): number;
+  getGoogleClientId(): string;
+  getGoogleClientSecret(): string;
+  getGoogleCallbackUrl(): string;
+  getGoogleScope(): string;
 }
