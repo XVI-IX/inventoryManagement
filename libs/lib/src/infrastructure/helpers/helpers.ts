@@ -9,7 +9,7 @@ export const generateResetToken = async (): Promise<string> => {
   return hashedToken;
 };
 
-export const generateOTP = async (): string => {
+export const generateOTP = (): string => {
   return crypto.randomBytes(3).toString('hex');
 };
 

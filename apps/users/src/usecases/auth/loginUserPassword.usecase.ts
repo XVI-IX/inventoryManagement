@@ -27,6 +27,10 @@ export class LoginUserPasswordUseCase {
         throw new NotFoundException('User not found');
       }
 
+      if (!existingUser.isEmailVerified) {
+        throw new BadRequestException('Please, verify your email address');
+      }
+
       const isPasswordMatch = await this.argonService.comparePassword(
         entity.password,
         existingUser.password,
