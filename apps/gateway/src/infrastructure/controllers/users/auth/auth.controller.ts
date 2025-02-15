@@ -13,6 +13,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import {
   CreateUserInput,
   LoginUserPassword,
+  VerifyEmailInput,
 } from 'apps/users/src/infrastructure/common/schema/users.schema';
 
 @Controller('v1/auth')
@@ -54,6 +55,12 @@ export class AuthGatewayController {
       password: body.password,
       token,
     });
+  }
+
+  @Post('/verify-email')
+  @Public()
+  async verifyEmail(@Body() body: VerifyEmailInput) {
+    return this.usersService.send('verifyEmail', body);
   }
 
   @Get('google/login')

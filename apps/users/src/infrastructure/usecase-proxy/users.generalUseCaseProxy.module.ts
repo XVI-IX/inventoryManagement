@@ -11,6 +11,7 @@ import { LoginUserPasswordUseCase } from '../../usecases/auth/loginUserPassword.
 import { JWTokenService } from '@app/lib/infrastructure/services/jwt/jwt.service';
 import { ForgotPasswordUseCase } from '../../usecases/auth/forgotPassword.usecase';
 import { ResetPasswordUseCase } from '../../usecases/auth/resetPassword.usecase';
+import { VerifyEmailUseCase } from '../../usecases/auth/verifyEmail.usecase';
 
 @Module({
   imports: [DatabaseModule, UserRepositoryModule, ArgonModule, JWTModule],
@@ -21,6 +22,7 @@ export class UsersGeneralUseCaseProxyModule {
     'LOGIN_USER_PASSWORD_USE_CASE_PROXY';
   static FORGOT_PASSWORD_USE_CASE_PROXY = 'FORGOT_PASSWORD_USE_CASE_PROXY';
   static RESET_PASSWORD_USE_CASE_PROXY = 'RESET_PASSWORD_USE_CASE_PROXY';
+  static VERIFY_EMAIL_USE_CASE_PROXY = 'VERIFY_EMAIL_USE_CASE_PROXY';
 
   static register(): DynamicModule {
     return {
@@ -72,12 +74,19 @@ export class UsersGeneralUseCaseProxyModule {
               new ResetPasswordUseCase(userRepository, argonService),
             ),
         },
+        {
+          inject: [UsersRepository],
+          provide: UsersGeneralUseCaseProxyModule.VERIFY_EMAIL_USE_CASE_PROXY,
+          useFactory: (userRepository: UsersRepository) =>
+            new UseCaseProxy(new VerifyEmailUseCase(userRepository)),
+        },
       ],
       exports: [
         UsersGeneralUseCaseProxyModule.REGISTER_USER_USE_CASE_PROXY,
         UsersGeneralUseCaseProxyModule.LOGIN_USER_PASSWORD_USE_CASE_PROXY,
         UsersGeneralUseCaseProxyModule.FORGOT_PASSWORD_USE_CASE_PROXY,
         UsersGeneralUseCaseProxyModule.RESET_PASSWORD_USE_CASE_PROXY,
+        UsersGeneralUseCaseProxyModule.VERIFY_EMAIL_USE_CASE_PROXY,
       ],
     };
   }

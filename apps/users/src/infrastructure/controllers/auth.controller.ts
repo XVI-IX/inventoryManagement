@@ -2,7 +2,10 @@ import { Controller, Inject, Logger } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   CreateUserInput,
+  ForgotPasswordInput,
   LoginUserPassword,
+  ResetPasswordInput,
+  VerifyEmailInput,
 } from '../common/schema/users.schema';
 import { UseCaseProxy } from '@app/lib/infrastructure/usecase-proxy/usecase-proxy';
 import { UsersGeneralUseCaseProxyModule } from '../usecase-proxy/users.generalUseCaseProxy.module';
@@ -12,6 +15,7 @@ import { Users } from '@app/lib/infrastructure/services/database/entities/user.e
 import { LoginUserPasswordUseCase } from '../../usecases/auth/loginUserPassword.usecase';
 import { ForgotPasswordUseCase } from '../../usecases/auth/forgotPassword.usecase';
 import { ResetPasswordUseCase } from '../../usecases/auth/resetPassword.usecase';
+import { VerifyEmailUseCase } from '../../usecases/auth/verifyEmail.usecase';
 
 @Controller()
 export class AuthController {
@@ -25,6 +29,8 @@ export class AuthController {
     private readonly forgotPasswordUseCase: UseCaseProxy<ForgotPasswordUseCase>,
     @Inject(UsersGeneralUseCaseProxyModule.RESET_PASSWORD_USE_CASE_PROXY)
     private readonly resetPasswordUseCase: UseCaseProxy<ResetPasswordUseCase>,
+    @Inject(UsersGeneralUseCaseProxyModule.VERIFY_EMAIL_USE_CASE_PROXY)
+    private readonly verifyEmailUseCase: UseCaseProxy<VerifyEmailUseCase>,
   ) {
     this.logger = new Logger(AuthController.name);
   }
@@ -58,7 +64,7 @@ export class AuthController {
   }
 
   @MessagePattern('forgotPassword')
-  async forgotPassword(@Payload() data: { email: string }) {
+  async forgotPassword(@Payload() data: ForgotPasswordInput) {
     try {
       const response = await this.forgotPasswordUseCase
         .getInstance()
@@ -75,13 +81,27 @@ export class AuthController {
   }
 
   @MessagePattern('resetPassword')
-  async resetPassword(@Payload() data: { password: string; token: string }) {
+  async resetPassword(@Payload() data: ResetPasswordInput) {
     try {
       const response = await this.resetPasswordUseCase
         .getInstance()
         .resetPassword(data.token, data.password);
 
       return HttpResponse.send('Password reset successfully', response);
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  @MessagePattern('verifyEmail')
+  async verifyEmail(@Payload() data: VerifyEmailInput) {
+    try {
+      const response = await this.verifyEmailUseCase
+        .getInstance()
+        .verifyEmail(data.email, data.token);
+
+      return HttpResponse.send('Email Verified', response);
     } catch (error) {
       this.logger.error(error);
       throw error;

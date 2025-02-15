@@ -4,6 +4,8 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 import { OmitType, PartialType } from '@nestjs/mapped-types';
@@ -64,4 +66,32 @@ export class LoginUserPassword {
   @IsString()
   @IsNotEmpty()
   password: string;
+}
+
+export class VerifyEmailInput {
+  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @MaxLength(6)
+  @MinLength(6)
+  token: string;
+}
+
+export class ForgotPasswordInput {
+  @IsEmail()
+  @IsString()
+  email: string;
+}
+
+export class ResetPasswordInput {
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  token: string;
 }
