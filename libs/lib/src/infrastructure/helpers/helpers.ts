@@ -9,12 +9,17 @@ export const generateResetToken = async (): Promise<string> => {
   return hashedToken;
 };
 
+export const generateOTP = async (): string => {
+  return crypto.randomBytes(3).toString('hex');
+};
+
 export const cleanUserResponse = (user: Users | Users[]) => {
   if (Array.isArray(user)) {
     return user.map((u) => {
       delete u.password;
       delete u.resetToken;
       delete u.resetTokenExpires;
+      delete u.verificationToken;
 
       return u;
     });
@@ -22,6 +27,7 @@ export const cleanUserResponse = (user: Users | Users[]) => {
     delete user.password;
     delete user.resetToken;
     delete user.resetTokenExpires;
+    delete user.verificationToken;
 
     return user;
   }

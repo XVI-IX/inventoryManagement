@@ -72,7 +72,8 @@ export class Users {
   @Column({ type: 'boolean', default: false })
   isEmailVerified: boolean;
 
-  // @Column({ type: })
+  @Column({ type: 'varchar', default: null })
+  verificationToken: string;
 
   @CreateDateColumn()
   createdAt: Date;
