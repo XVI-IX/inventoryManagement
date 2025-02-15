@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { IRolesRepository } from '../../domain/repositories/rbac.repository';
 import {
@@ -65,21 +66,98 @@ export class RolesRepository implements IRolesRepository {
   }
 
   async find?(condition: IFindOptions<Roles>): Promise<Roles[]> {
-    throw new Error('Method not implemented.');
+    try {
+      const role = await this.rolesRepository.find({
+        where: condition.where,
+        take: condition.take,
+        skip: condition.skip,
+        order: condition.order,
+      });
+
+      if (!role) {
+        throw new BadRequestException('Roles could not be retrieved');
+      }
+
+      if (role.length === 0) {
+        throw new NotFoundException('Roles not found');
+      }
+
+      return role;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
 
   async findOne?(condition: IFindOneOptions<Roles>): Promise<Roles> {
-    throw new Error('Method not implemented.');
+    try {
+      const role = await this.rolesRepository.findOne({
+        where: condition.where,
+      });
+
+      if (!role) {
+        throw new BadRequestException('Role could not be retrieved');
+      }
+
+      return role;
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw error;
+    }
   }
 
   async update?(
     condition: Partial<Roles>,
     entity: Partial<Roles>,
   ): Promise<Roles> {
-    throw new Error('Method not implemented.');
+    try {
+      const roleExists = await this.rolesRepository.findOne({
+        where: { ...condition },
+      });
+
+      if (!roleExists) {
+        throw new NotFoundException('Role not found');
+      }
+
+      const updatedRole = await this.rolesRepository.update(condition, entity);
+
+      if (!updatedRole) {
+        throw new BadRequestException('Role could not be updated');
+      }
+
+      const getRole = await this.rolesRepository.findOne({
+        where: {
+          id: roleExists.id,
+        },
+      });
+
+      return getRole;
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw error;
+    }
   }
 
   async delete?(condition: Partial<Roles>): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    try {
+      const roleExists = await this.rolesRepository.findOne({
+        where: { ...condition },
+      });
+
+      if (!roleExists) {
+        throw new BadRequestException('Role could not be retrieved');
+      }
+
+      const deletedRole = await this.rolesRepository.delete({ ...condition });
+
+      if (!deletedRole) {
+        throw new BadRequestException('Role could not be deleted');
+      }
+
+      return true;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
 }
