@@ -1,6 +1,12 @@
 import { DataSource } from 'typeorm';
 import { envConfig } from '../../config/environment.config';
 import { Users } from './entities/user.entity';
+import {
+  Permissions,
+  RolePermissions,
+  Roles,
+  UserRoles,
+} from './entities/rbac.entity';
 
 export const databaseProviders = [
   {
@@ -13,7 +19,7 @@ export const databaseProviders = [
         username: envConfig.getDatabaseUser(),
         password: envConfig.getDatabasePassword(),
         database: envConfig.getDatabaseName(),
-        entities: [Users],
+        entities: [Users, Roles, Permissions, RolePermissions, UserRoles],
         // synchronize: true,
       });
 
