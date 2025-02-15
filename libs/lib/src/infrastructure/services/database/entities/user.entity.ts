@@ -45,6 +45,9 @@ export class Users {
   })
   status: string;
 
+  @Column({ type: 'varchar', default: null })
+  profileImage?: string;
+
   @Column()
   jobTitle?: string;
 
@@ -65,6 +68,9 @@ export class Users {
 
   @Column({ type: 'varchar', default: null })
   googleProfileId?: string;
+
+  @Column({ type: 'boolean', default: false })
+  isEmailVerified: boolean;
 
   // @Column({ type: })
 

@@ -6,6 +6,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const httpGateway = await NestFactory.create<INestApplication>(GatewayModule);
+  httpGateway.setGlobalPrefix('api');
   await httpGateway.listen(envConfig.getPort());
 
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(

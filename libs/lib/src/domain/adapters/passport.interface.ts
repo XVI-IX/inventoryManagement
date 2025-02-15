@@ -1,3 +1,8 @@
 export interface IPassportService {
-  validateGoogleProfile(profile: any): Promise<any>;
+  validate(
+    accessToken: any,
+    refreshToken: any,
+    profile: any,
+    cb: any,
+  ): Promise<unknown>;
 }

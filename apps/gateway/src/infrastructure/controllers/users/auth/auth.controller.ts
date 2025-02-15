@@ -1,12 +1,21 @@
 import { Public } from '@app/lib/infrastructure/decorators';
-import { Body, Controller, Inject, Post, Query } from '@nestjs/common';
+import { GoogleAuthGuard } from '@app/lib/infrastructure/guards/googleAuth.guard';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
   CreateUserInput,
   LoginUserPassword,
 } from 'apps/users/src/infrastructure/common/schema/users.schema';
 
-@Controller('api/v1/auth')
+@Controller('v1/auth')
 export class AuthGatewayController {
   constructor(
     @Inject('USERS_SERVICE') private readonly usersService: ClientProxy,
@@ -46,4 +55,18 @@ export class AuthGatewayController {
       token,
     });
   }
+
+  @Get('google/login')
+  @Public()
+  @UseGuards(GoogleAuthGuard)
+  async googleLogin() {
+    return {
+      message: 'Google login',
+    };
+  }
+
+  @Get('google/redirect')
+  @Public()
+  @UseGuards(GoogleAuthGuard)
+  async googleRedirect() {}
 }

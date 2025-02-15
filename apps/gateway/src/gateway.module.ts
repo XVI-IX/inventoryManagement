@@ -8,6 +8,7 @@ import { AuthGuard } from '@app/lib/infrastructure/guards/auth.guard';
 import { JWTModule } from '@app/lib/infrastructure/services/jwt/jwt.module';
 import { AuthGatewayController } from './infrastructure/controllers/users/auth/auth.controller';
 import { ArgonModule } from '@app/lib/infrastructure/services/argon/argon.module';
+import { PassportModule } from '@app/lib/infrastructure/services/passport/passport.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ArgonModule } from '@app/lib/infrastructure/services/argon/argon.module
     ]),
     JWTModule,
     ArgonModule,
+    PassportModule,
   ],
   controllers: [GatewayController, AuthGatewayController],
   providers: [

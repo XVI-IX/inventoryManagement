@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { GatewayService } from './gateway.service';
 
-@Controller('/api/v1')
+@Controller('v1')
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}
 
