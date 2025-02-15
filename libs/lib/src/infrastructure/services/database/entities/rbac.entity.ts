@@ -2,17 +2,26 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('roles')
 export class Roles {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar' })
   name: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  description: string;
+
+  @ManyToMany(() => Permissions)
+  @JoinTable({ name: 'rolePermissions' })
+  permissions: Permissions[];
 
   @CreateDateColumn({})
   createdAt: Date;
@@ -21,7 +30,7 @@ export class Roles {
   updatedAt: Date;
 }
 
-@Entity()
+@Entity('permissions')
 export class Permissions {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -39,7 +48,7 @@ export class Permissions {
   updatedAt: Date;
 }
 
-@Entity()
+@Entity('rolePermissions')
 export class RolePermissions {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -57,7 +66,7 @@ export class RolePermissions {
   updatedAt: Date;
 }
 
-@Entity()
+@Entity('userRoles')
 export class UserRoles {
   @PrimaryGeneratedColumn('uuid')
   id: string;
