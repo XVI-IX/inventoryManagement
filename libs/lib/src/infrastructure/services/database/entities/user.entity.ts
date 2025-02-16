@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Roles } from './rbac.entity';
 
 // export enum UserRole {
 //   ADMIN = 'admin',
@@ -35,8 +37,8 @@ export class Users {
   @Column('varchar')
   email: string;
 
-  @Column('varchar')
-  roleId?: string;
+  @ManyToOne(() => Roles, (role) => role.users, { nullable: false })
+  role: Roles;
 
   @Column({
     type: 'enum',

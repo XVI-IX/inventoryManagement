@@ -17,6 +17,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    // "include": ["src/**/*.ts"],
     "paths": {
       "@app/lib": ["libs/lib/src"],
       "@app/lib/*": ["libs/lib/src/*"]
