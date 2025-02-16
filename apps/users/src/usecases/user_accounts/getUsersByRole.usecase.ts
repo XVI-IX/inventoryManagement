@@ -5,11 +5,13 @@ export class GetUsersByRoleUseCase {
   private readonly logger: Logger;
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async getUsersByRole(roleId: string) {
+  async getUsersByRole(role: string) {
     try {
       const users = await this.userRepository.find({
         where: {
-          roleId: roleId,
+          role: {
+            name: role,
+          },
         },
       });
 

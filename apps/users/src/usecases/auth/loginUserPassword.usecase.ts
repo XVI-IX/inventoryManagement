@@ -43,7 +43,7 @@ export class LoginUserPasswordUseCase {
       const payload: IJwtPayload = {
         id: existingUser.id,
         email: existingUser.email,
-        role: existingUser.roleId,
+        role: existingUser.role.name,
       };
       const token = this.jwtService.generateToken(payload);
 

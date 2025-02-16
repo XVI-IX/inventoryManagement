@@ -7,4 +7,10 @@ export const rbacProviders = [
     useFactory: (dataSource: DataSource) => dataSource.getRepository(Roles),
     inject: ['DATA_SOURCE'],
   },
+  {
+    provide: 'PERMISSIONS_REPOSITORY',
+    useFactory: (dataSource: DataSource) =>
+      dataSource.getRepository(Permissions),
+    inject: ['DATA_SOURCE'],
+  },
 ];

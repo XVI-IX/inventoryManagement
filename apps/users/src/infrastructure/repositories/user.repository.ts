@@ -42,7 +42,12 @@ export class UsersRepository implements IUserRepository {
 
   async find?(condition: IFindOptions<Users>): Promise<Users[]> {
     try {
-      const users = await this.usersRepository.find(condition);
+      const users = await this.usersRepository.find({
+        where: condition.where,
+        skip: condition.skip,
+        take: condition.take,
+        order: condition.order,
+      });
 
       if (!users) {
         throw new BadRequestException('Users could not be retrieved');
