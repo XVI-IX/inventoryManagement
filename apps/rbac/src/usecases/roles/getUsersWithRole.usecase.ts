@@ -24,13 +24,9 @@ export class GetUsersWithRoleUseCase {
         throw new NotFoundException('Role not found');
       }
 
-      const roleUsers = await this.userRepository.find({
-        where: {
-          role: {
-            id: roleExists.id,
-          },
-        },
-      });
+      const roleUsers = await this.userRepository.getUsersWithRole(roleName);
+
+      return roleUsers;
     } catch (error) {
       this.logger.error(error);
       throw error;
