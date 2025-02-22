@@ -24,16 +24,25 @@ export class RolesRepository implements IRolesRepository {
     this.logger = new Logger(RolesRepository.name);
   }
 
-  async getRolesWithPermission(
-    name?: string,
-    permissionId?: string,
-  ): Promise<Roles[]> {
+  async getRolesWithPermission(permissionId: string): Promise<Roles[]> {
     try {
-      const roleExists = await this.rolesRepository.find({
-        where: {},
-      });
+      const roles = await this.rolesRepository
+        .createQueryBuilder('roles')
+        .leftJoinAndSelect('rolePermissions', 'permissions')
+        .where('permission.id = :permissionId', {
+          permissionId: permissionId,
+        })
+        .getMany();
+
+      if (!roles) {
+        throw new BadRequestException(
+          'Roles with permission could not be retrieved',
+        );
+      }
+
+      return roles;
     } catch (error) {
-      this.logger.error(error.message, error.stack);
+      this.logger.error(error);
       throw error;
     }
   }

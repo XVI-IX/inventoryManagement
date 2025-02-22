@@ -9,10 +9,7 @@ import {
 import { Users } from '@app/lib/infrastructure/services/database/entities/user.entity';
 
 export interface IRolesRepository extends IBaseRepository<Roles> {
-  getRolesWithPermission(
-    name?: string,
-    permissionId?: string,
-  ): Promise<Roles[]>;
+  getRolesWithPermission(permissionId?: string): Promise<Roles[]>;
 }
 
 export interface IPermissionsRepository extends IBaseRepository<Permissions> {}
