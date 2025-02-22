@@ -1,29 +1,35 @@
-import { Logger, NotFoundException } from "@nestjs/common";
-import { IPermissionsRepository, IRolesRepository } from "../../domain/repositories/rbac.repository";
-import { Roles } from "@app/lib/infrastructure/services/database/entities/rbac.entity";
+import { Logger, NotFoundException } from '@nestjs/common';
+import {
+  IPermissionsRepository,
+  IRolesRepository,
+} from '../../domain/repositories/rbac.repository';
+import { Roles } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
 
 export class GetAllRolesWithPermissionUseCase {
-  private readonly logger: Logger
+  private readonly logger: Logger;
   constructor(
     private readonly roleRepository: IRolesRepository,
-    private readonly permissionRepository: IPermissionsRepository
+    private readonly permissionRepository: IPermissionsRepository,
   ) {
-    this.logger = new Logger(GetAllRolesWithPermissionUseCase.name)
+    this.logger = new Logger(GetAllRolesWithPermissionUseCase.name);
   }
 
   async execute(permissionId: string): Promise<Roles[]> {
     try {
       const permissionExists = await this.permissionRepository.findOne({
         where: {
-          id: permissionId
-        }
-      })
+          id: permissionId,
+        },
+      });
 
       if (!permissionExists) {
-        throw new NotFoundException("Permission not found")
+        throw new NotFoundException('Permission not found');
       }
 
-      const rolesWithPermission = await this.
+      const rolesWithPermission =
+        await this.roleRepository.getRolesWithPermission(permissionId);
+
+      return rolesWithPermission;
     } catch (error) {
       this.logger.error(error.message);
       throw error;
