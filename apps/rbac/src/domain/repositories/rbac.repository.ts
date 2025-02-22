@@ -6,7 +6,6 @@ import {
   Roles,
   UserRoles,
 } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
-import { Users } from '@app/lib/infrastructure/services/database/entities/user.entity';
 
 export interface IRolesRepository extends IBaseRepository<Roles> {
   getRolesWithPermission(permissionId?: string): Promise<Roles[]>;

@@ -21,15 +21,24 @@ export class UsersRepository implements IUserRepository {
     this.logger = new Logger(UsersRepository.name);
   }
 
-  // findUsersByRole(roleId: string): Promise<Users> {
-  //   throw new Error('Method not implemented.');
-  // }
-  // findUsersByStatus(status: string): Promise<Users> {
-  //   throw new Error('Method not implemented.');
-  // }
-  // findUsersCountByRole(): Promise<any> {
-  //   throw new Error('Method not implemented.');
-  // }
+  async getUsersWithRole(roleName: string): Promise<Users[]> {
+    try {
+      const users = await this.usersRepository
+        .createQueryBuilder('users')
+        .leftJoinAndSelect('role.user', 'role')
+        .where('role.name = :roleName', { roleName })
+        .getMany();
+
+      if (!users) {
+        throw new BadRequestException('Users could not be retrieved');
+      }
+
+      return users;
+    } catch (error) {
+      this.logger.error(error.message);
+      throw error;
+    }
+  }
 
   async save?(entity: Partial<Users>): Promise<Users> {
     try {

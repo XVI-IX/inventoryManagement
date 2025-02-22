@@ -5,4 +5,5 @@ export interface IUserRepository extends IBaseRepository<Users> {
   // findUsersByRole(roleId: string): Promise<Users>;
   // findUsersByStatus(status: string): Promise<Users>;
   // findUsersCountByRole(): Promise<any>;
+  getUsersWithRole(roleName: string): Promise<Users[]>;
 }
