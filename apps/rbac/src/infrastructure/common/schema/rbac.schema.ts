@@ -39,6 +39,7 @@ export class CreateRoleInput {
     manageSystemSettings: boolean;
     configureNotifications: boolean;
   };
+  // permissions: string[]
 }
 
 export class CreatePermissionInput {

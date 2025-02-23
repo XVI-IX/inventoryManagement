@@ -8,4 +8,6 @@ export interface IRolesRepository extends IBaseRepository<Roles> {
   getRolesWithPermission(permissionId?: string): Promise<Roles[]>;
 }
 
-export interface IPermissionsRepository extends IBaseRepository<Permissions> {}
+export interface IPermissionsRepository extends IBaseRepository<Permissions> {
+  findIn(names: string[]): Promise<Permissions[]>;
+}
