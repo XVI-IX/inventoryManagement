@@ -7,13 +7,7 @@ export class GetUsersByRoleUseCase {
 
   async getUsersByRole(role: string) {
     try {
-      const users = await this.userRepository.find({
-        where: {
-          role: {
-            name: role,
-          },
-        },
-      });
+      const users = await this.userRepository.getUsersWithRole(role);
 
       if (!users) {
         throw new BadRequestException('Users could not be retrieved');

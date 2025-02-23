@@ -1,10 +1,10 @@
 import { BadRequestException, Logger } from '@nestjs/common';
-import { IRolePermissionsRepository } from '../../domain/repositories/rbac.repository';
+import { IRolesRepository } from '../../domain/repositories/rbac.repository';
 import { Roles } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
 
 export class GetRoleByIdUseCase {
   private readonly logger: Logger;
-  constructor(private readonly roleRepository: IRolePermissionsRepository) {
+  constructor(private readonly roleRepository: IRolesRepository) {
     this.logger = new Logger(GetRoleByIdUseCase.name);
   }
 
