@@ -14,6 +14,7 @@ import { GetUsersWithRoleUseCase } from '../../usecases/roles/getUsersWithRole.u
 import { UsersRepository } from 'apps/users/src/infrastructure/repositories/user.repository';
 import { GetRoleByIdUseCase } from '../../usecases/roles/getRoleById.usecase';
 import { GetAllRolesWithPermissionUseCase } from '../../usecases/roles/getAllRolesWithPermission.useCase';
+import { AssignPermissionToRoleUseCase } from '../../usecases/permissions/assignPermissionToRole.usecase';
 
 @Module({
   imports: [DatabaseModule, RbacRepositoryModule, UserRepositoryModule],
@@ -27,6 +28,8 @@ export class RBACGeneralUseCaseProxyModule {
     'GET_PERMISSION_BY_NAME_OR_ID_USE_CASE_PROXY';
   static UPDATE_PERMISSION_BY_USE_CASE_PROXY =
     'UPDATE_PERMISSION_BY_USE_CASE_PROXY';
+  static ASSIGN_PERMISSION_TO_ROLE_USE_CASE_PROXY =
+    'ASSIGN_PERMISSION_TO_ROLE_USE_CASE_PROXY';
 
   // Roles
   static GET_ALL_ROLES_USE_CASE_PROXY = 'GET_ALL_ROLES_USE_CASE_PROXY';
@@ -113,6 +116,33 @@ export class RBACGeneralUseCaseProxyModule {
               ),
             ),
         },
+        {
+          inject: [RolesRepository, PermissionsRepository],
+          provide:
+            RBACGeneralUseCaseProxyModule.ASSIGN_PERMISSION_TO_ROLE_USE_CASE_PROXY,
+          useFactory: (
+            rolesRepository: RolesRepository,
+            permissionRepository: PermissionsRepository,
+          ) =>
+            new UseCaseProxy(
+              new AssignPermissionToRoleUseCase(
+                rolesRepository,
+                permissionRepository,
+              ),
+            ),
+        },
+      ],
+      exports: [
+        RBACGeneralUseCaseProxyModule.GET_ALL_PERMISSIONS_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.DELETE_PERMISSIONS_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.GET_PERMISSION_BY_NAME_OR_ID_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.UPDATE_PERMISSION_BY_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.ASSIGN_PERMISSION_TO_ROLE_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.GET_ALL_ROLES_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.GET_ALL_ROLE_USERS_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.GET_ROLE_BY_ID_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.GET_ALL_ROLES_WITH_PERMISSION_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.UPDATE_ROLE_USE_CASE_PROXY,
       ],
     };
   }
