@@ -37,7 +37,7 @@ export class Users {
   @Column('varchar')
   email: string;
 
-  @ManyToOne(() => Roles, (role) => role.users, { nullable: false })
+  @ManyToOne(() => Roles, (role) => role.users)
   role: Roles;
 
   @Column({

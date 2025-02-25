@@ -12,9 +12,17 @@ import { JWTokenService } from '@app/lib/infrastructure/services/jwt/jwt.service
 import { ForgotPasswordUseCase } from '../../usecases/auth/forgotPassword.usecase';
 import { ResetPasswordUseCase } from '../../usecases/auth/resetPassword.usecase';
 import { VerifyEmailUseCase } from '../../usecases/auth/verifyEmail.usecase';
+import { RolesRepository } from 'apps/rbac/src/infrastructure/repository/roles.repository';
+import { RbacRepositoryModule } from 'apps/rbac/src/infrastructure/repository/rbac.repository.module';
 
 @Module({
-  imports: [DatabaseModule, UserRepositoryModule, ArgonModule, JWTModule],
+  imports: [
+    DatabaseModule,
+    UserRepositoryModule,
+    ArgonModule,
+    JWTModule,
+    RbacRepositoryModule,
+  ],
 })
 export class UsersGeneralUseCaseProxyModule {
   static REGISTER_USER_USE_CASE_PROXY = 'REGISTER_USER_USE_CASE_PROXY';
@@ -29,14 +37,19 @@ export class UsersGeneralUseCaseProxyModule {
       module: UsersGeneralUseCaseProxyModule,
       providers: [
         {
-          inject: [UsersRepository, ArgonService],
+          inject: [UsersRepository, ArgonService, RolesRepository],
           provide: UsersGeneralUseCaseProxyModule.REGISTER_USER_USE_CASE_PROXY,
           useFactory: (
             usersRepository: UsersRepository,
             argonService: ArgonService,
+            roleRepository: RolesRepository,
           ) =>
             new UseCaseProxy(
-              new RegisterUserUseCase(usersRepository, argonService),
+              new RegisterUserUseCase(
+                usersRepository,
+                argonService,
+                roleRepository,
+              ),
             ),
         },
         {

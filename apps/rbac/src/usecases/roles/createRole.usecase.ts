@@ -5,7 +5,6 @@ import {
 } from '../../domain/repositories/rbac.repository';
 import { CreateRoleInput } from '../../infrastructure/common/schema/rbac.schema';
 import { Roles } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
-import { In } from 'typeorm';
 
 export class CreateRoleUseCase {
   private readonly logger: Logger;

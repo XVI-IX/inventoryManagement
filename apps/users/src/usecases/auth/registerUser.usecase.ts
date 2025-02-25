@@ -9,11 +9,13 @@ import {
   cleanUserResponse,
   generateOTP,
 } from '@app/lib/infrastructure/helpers/helpers';
+import { IRolesRepository } from 'apps/rbac/src/domain/repositories/rbac.repository';
 
 export class RegisterUserUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly argonService: IArgonService,
+    private readonly roleRepository: IRolesRepository,
   ) {}
 
   async registerUser(user: CreateUserInput) {
@@ -36,6 +38,18 @@ export class RegisterUserUseCase {
 
       user.password = hash;
       user['verificationToken'] = generateOTP();
+
+      const role = await this.roleRepository.findOne({
+        where: {
+          name: user.roleName,
+        },
+      });
+
+      if (!role) {
+        throw new ConflictException('Role does not exist');
+      }
+      delete user.roleName;
+      user['role'] = role;
       const newUser = await this.userRepository.save(user);
 
       return cleanUserResponse(newUser);

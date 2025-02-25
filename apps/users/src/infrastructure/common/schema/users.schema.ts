@@ -34,7 +34,7 @@ export class CreateUserInput {
 
   @IsString()
   @IsNotEmpty()
-  roleId: string;
+  roleName: string;
 
   @IsNumberString()
   @IsNotEmpty()
@@ -50,7 +50,7 @@ export class CreateUserInput {
 }
 
 export class UpdateUserInput extends PartialType(
-  OmitType(CreateUserInput, ['password', 'roleId'] as const),
+  OmitType(CreateUserInput, ['password', 'roleName'] as const),
 ) {
   @IsOptional()
   @IsString()

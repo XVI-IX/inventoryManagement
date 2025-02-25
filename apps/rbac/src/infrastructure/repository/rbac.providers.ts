@@ -1,4 +1,7 @@
-import { Roles } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
+import {
+  Permissions,
+  Roles,
+} from '@app/lib/infrastructure/services/database/entities/rbac.entity';
 import { DataSource } from 'typeorm';
 
 export const rbacProviders = [
