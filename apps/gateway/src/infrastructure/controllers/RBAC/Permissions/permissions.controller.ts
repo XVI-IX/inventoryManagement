@@ -40,4 +40,15 @@ export class PermissionsGatewayController {
   ) {
     return this.rbacService.send('updatePermission', { permissionId, data });
   }
+
+  @Put('/:permissionId/assign')
+  async assignPermissionToRole(
+    @Param('permissionId') permissionId: string,
+    @Body() data: { roleId: string },
+  ) {
+    return this.rbacService.send('assignPermissionToRole', {
+      roleId: data.roleId,
+      permissionId,
+    });
+  }
 }

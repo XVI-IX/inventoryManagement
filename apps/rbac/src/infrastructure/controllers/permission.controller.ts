@@ -8,6 +8,7 @@ import { DeletePermissionUseCase } from '../../usecases/permissions/deletePermis
 import { GetPermissionByNameOrIdUseCase } from '../../usecases/permissions/getPermissionByNameOrId.usecase';
 import { UpdatePermissonUseCase } from '../../usecases/permissions/updatePermission.usecase';
 import { Permissions } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
+import { AssignPermissionToRoleUseCase } from '../../usecases/permissions/assignPermissionToRole.usecase';
 
 @Controller()
 export class PermissionController {
@@ -23,6 +24,10 @@ export class PermissionController {
     private readonly getPermissionByNameOrIdUseCase: UseCaseProxy<GetPermissionByNameOrIdUseCase>,
     @Inject(RBACGeneralUseCaseProxyModule.UPDATE_PERMISSION_BY_USE_CASE_PROXY)
     private readonly updatePermissionUseCase: UseCaseProxy<UpdatePermissonUseCase>,
+    @Inject(
+      RBACGeneralUseCaseProxyModule.ASSIGN_PERMISSION_TO_ROLE_USE_CASE_PROXY,
+    )
+    private readonly assignPermissionToRoleUseCase: UseCaseProxy<AssignPermissionToRoleUseCase>,
   ) {
     this.logger = new Logger(PermissionController.name);
   }
@@ -85,6 +90,22 @@ export class PermissionController {
       return HttpResponse.send('Permission updated', permission);
     } catch (error) {
       this.logger.error(error.message);
+      throw error;
+    }
+  }
+
+  @MessagePattern('assignPermissionToRole')
+  async assignPermissionToRole(
+    @Payload() data: { roleId: string; permissionId: string },
+  ) {
+    try {
+      const results = await this.assignPermissionToRoleUseCase
+        .getInstance()
+        .execute(data.roleId, data.permissionId);
+
+      return HttpResponse.send('Permission assigned', results);
+    } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
