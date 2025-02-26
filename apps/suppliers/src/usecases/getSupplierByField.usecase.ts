@@ -8,7 +8,7 @@ export class GetSupplierByField {
     this.logger = new Logger(GetSupplierByField.name);
   }
 
-  async execute(fieldObj: Partial<Suppliers[]>): Promise<Suppliers> {
+  async execute(fieldObj: Partial<Suppliers>): Promise<Suppliers[]> {
     try {
       const suppliers = await this.suppliersRepository.find({
         where: fieldObj,
