@@ -70,17 +70,14 @@ export class SupplierRepository implements ISuppliersRepository {
     }
   }
 
-  async find(
-    condition: Partial<Suppliers>,
-    options?: IFindOptions<Suppliers>,
-  ): Promise<Suppliers[]> {
+  async find(condition: IFindOptions<Suppliers>): Promise<Suppliers[]> {
     try {
       const suppliers = await this.supplierRepository.find({
-        where: condition,
-        skip: options.skip,
-        select: options.select,
-        take: options.take,
-        order: options.order,
+        where: condition.where,
+        skip: condition.skip,
+        select: condition.select,
+        take: condition.take,
+        order: condition.order,
       });
 
       if (!suppliers) {
@@ -94,13 +91,10 @@ export class SupplierRepository implements ISuppliersRepository {
     }
   }
 
-  async findOne(
-    condition: Partial<Suppliers>,
-    options: IFindOneOptions<Suppliers>,
-  ): Promise<Suppliers> {
+  async findOne(condition: IFindOneOptions<Suppliers>): Promise<Suppliers> {
     try {
       const supplier = await this.supplierRepository.findOne({
-        where: condition,
+        where: condition.where,
         relations: {
           products: true,
         },
