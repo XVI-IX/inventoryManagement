@@ -39,7 +39,7 @@ export class UsersRepository implements IUserRepository {
         throw new BadRequestException('Users could not be retrieved');
       }
 
-      return cleanUserResponse(users);
+      return cleanUserResponse(users) as Users[];
     } catch (error) {
       this.logger.error(error.message);
       throw error;
