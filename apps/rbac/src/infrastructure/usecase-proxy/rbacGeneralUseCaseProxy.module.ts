@@ -16,6 +16,7 @@ import { GetRoleByIdUseCase } from '../../usecases/roles/getRoleById.usecase';
 import { GetAllRolesWithPermissionUseCase } from '../../usecases/roles/getAllRolesWithPermission.useCase';
 import { AssignPermissionToRoleUseCase } from '../../usecases/permissions/assignPermissionToRole.usecase';
 import { UpdateRoleUseCase } from '../../usecases/roles/updateRole.usecase';
+import { CreateRoleUseCase } from '../../usecases/roles/createRole.usecase';
 
 @Module({
   imports: [DatabaseModule, RbacRepositoryModule, UserRepositoryModule],
@@ -40,6 +41,8 @@ export class RBACGeneralUseCaseProxyModule {
   static GET_ALL_ROLES_WITH_PERMISSION_USE_CASE_PROXY =
     'GET_ALL_ROLES_WITH_PERMISSION_USE_CASE_PROXY';
   static UPDATE_ROLE_USE_CASE_PROXY = 'UPDATE_ROLE_USE_CASE_PROXY';
+  static CREATE_ROLE_USE_CASE_PROXY = 'CREATE_ROLE_USE_CASE_PROXY';
+
   static register(): DynamicModule {
     return {
       module: RBACGeneralUseCaseProxyModule,
@@ -138,6 +141,17 @@ export class RBACGeneralUseCaseProxyModule {
           useFactory: (rolesRepository: RolesRepository) =>
             new UseCaseProxy(new UpdateRoleUseCase(rolesRepository)),
         },
+        {
+          inject: [RolesRepository, PermissionsRepository],
+          provide: RBACGeneralUseCaseProxyModule.CREATE_ROLE_USE_CASE_PROXY,
+          useFactory: (
+            rolesRepository: RolesRepository,
+            permissionRepository: PermissionsRepository,
+          ) =>
+            new UseCaseProxy(
+              new CreateRoleUseCase(rolesRepository, permissionRepository),
+            ),
+        },
       ],
       exports: [
         RBACGeneralUseCaseProxyModule.GET_ALL_PERMISSIONS_USE_CASE_PROXY,
@@ -150,6 +164,7 @@ export class RBACGeneralUseCaseProxyModule {
         RBACGeneralUseCaseProxyModule.GET_ROLE_BY_ID_USE_CASE_PROXY,
         RBACGeneralUseCaseProxyModule.GET_ALL_ROLES_WITH_PERMISSION_USE_CASE_PROXY,
         RBACGeneralUseCaseProxyModule.UPDATE_ROLE_USE_CASE_PROXY,
+        RBACGeneralUseCaseProxyModule.CREATE_ROLE_USE_CASE_PROXY,
       ],
     };
   }

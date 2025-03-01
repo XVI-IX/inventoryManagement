@@ -1,3 +1,4 @@
+import { Public } from '@app/lib/infrastructure/decorators';
 import { Roles } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
 import {
   Body,
@@ -5,10 +6,12 @@ import {
   Get,
   Inject,
   Param,
+  Post,
   Put,
   Query,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { CreateRoleInput } from 'apps/rbac/src/infrastructure/common/schema/rbac.schema';
 
 @Controller('v1/roles')
 export class RoleGatewayController {
@@ -40,5 +43,11 @@ export class RoleGatewayController {
     @Body() data: Partial<Roles>,
   ) {
     return this.roleService.send('updateRole', data);
+  }
+
+  @Post()
+  @Public()
+  async createRole(@Body() data: CreateRoleInput) {
+    return this.roleService.send('createRole', data);
   }
 }

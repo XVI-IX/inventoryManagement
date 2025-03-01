@@ -63,7 +63,7 @@ export class RolesRepository implements IRolesRepository {
         },
       });
 
-      if (roleExists) {
+      if (roleExists.length > 0) {
         throw new ConflictException('Role already exists');
       }
 
@@ -111,10 +111,6 @@ export class RolesRepository implements IRolesRepository {
       const role = await this.rolesRepository.findOne({
         where: condition.where,
       });
-
-      if (!role) {
-        throw new BadRequestException('Role could not be retrieved');
-      }
 
       return role;
     } catch (error) {

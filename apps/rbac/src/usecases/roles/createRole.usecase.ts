@@ -23,6 +23,8 @@ export class CreateRoleUseCase {
         },
       });
 
+      console.log(Boolean(roleExists));
+
       if (roleExists) {
         throw new ConflictException('Role already exists');
       }

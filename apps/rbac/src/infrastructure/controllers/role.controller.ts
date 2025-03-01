@@ -10,6 +10,8 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HttpResponse } from '@app/lib/infrastructure/helpers/response.helper';
 import { ServiceInterface } from '@app/lib/domain/adapters';
 import { Roles } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
+import { CreateRoleInput } from '../common/schema/rbac.schema';
+import { CreateRoleUseCase } from '../../usecases/roles/createRole.usecase';
 
 @Controller()
 export class RoleController {
@@ -28,12 +30,26 @@ export class RoleController {
       RBACGeneralUseCaseProxyModule.GET_ALL_ROLES_WITH_PERMISSION_USE_CASE_PROXY,
     )
     private readonly getAllRolesWithPermissionUseCase: UseCaseProxy<GetAllRolesWithPermissionUseCase>,
+    @Inject(RBACGeneralUseCaseProxyModule.CREATE_ROLE_USE_CASE_PROXY)
+    private readonly createRoleUseCase: UseCaseProxy<CreateRoleUseCase>,
   ) {
     this.logger = new Logger(RoleController.name);
   }
 
+  @MessagePattern('createRole')
+  async createRole(data: CreateRoleInput): Promise<ServiceInterface<Roles>> {
+    try {
+      const role = await this.createRoleUseCase.getInstance().execute(data);
+
+      return HttpResponse.send('Role created', role);
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
   @MessagePattern('getAllRoles')
-  async getAllRoles(): Promise<any> {
+  async getAllRoles(): Promise<ServiceInterface<Roles[]>> {
     try {
       const role = await this.getAllRolesUseCase.getInstance().execute();
 
@@ -45,7 +61,9 @@ export class RoleController {
   }
 
   @MessagePattern('getRoleById')
-  async getRoleById(@Payload() data: { roleId: string }): Promise<any> {
+  async getRoleById(
+    @Payload() data: { roleId: string },
+  ): Promise<ServiceInterface<Roles>> {
     try {
       const role = await this.getRoleByIdUseCase
         .getInstance()
