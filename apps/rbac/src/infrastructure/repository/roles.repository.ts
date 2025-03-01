@@ -89,6 +89,9 @@ export class RolesRepository implements IRolesRepository {
         take: condition.take,
         skip: condition.skip,
         order: condition.order,
+        relations: {
+          permissions: true,
+        },
       });
 
       if (!role) {
@@ -110,9 +113,9 @@ export class RolesRepository implements IRolesRepository {
     try {
       const role = await this.rolesRepository.findOne({
         where: condition.where,
-        // relations: {
-        //   permissions: true,
-        // }
+        relations: {
+          permissions: true,
+        },
       });
 
       return role;

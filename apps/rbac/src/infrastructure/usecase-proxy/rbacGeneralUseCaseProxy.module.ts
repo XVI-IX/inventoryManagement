@@ -136,10 +136,15 @@ export class RBACGeneralUseCaseProxyModule {
             ),
         },
         {
-          inject: [RolesRepository],
+          inject: [RolesRepository, PermissionsRepository],
           provide: RBACGeneralUseCaseProxyModule.UPDATE_ROLE_USE_CASE_PROXY,
-          useFactory: (rolesRepository: RolesRepository) =>
-            new UseCaseProxy(new UpdateRoleUseCase(rolesRepository)),
+          useFactory: (
+            rolesRepository: RolesRepository,
+            permissionRepository: PermissionsRepository,
+          ) =>
+            new UseCaseProxy(
+              new UpdateRoleUseCase(rolesRepository, permissionRepository),
+            ),
         },
         {
           inject: [RolesRepository, PermissionsRepository],
