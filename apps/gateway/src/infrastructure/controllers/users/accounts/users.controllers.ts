@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Inject,
-  Logger,
   Param,
   Put,
 } from '@nestjs/common';
@@ -13,17 +12,16 @@ import { UpdateUserInput } from 'apps/users/src/infrastructure/common/schema/use
 
 @Controller('v1/users')
 export class UsersGatewayController {
-  private readonly logger: Logger;
   constructor(
     @Inject('USERS_SERVICE') private readonly usersService: ClientProxy,
-  ) {
-    this.logger = new Logger(UsersGatewayController.name);
-  }
+  ) {}
 
   @Get()
   async getAllUsers() {
     return this.usersService.send('getAllUsers', {});
   }
+
+  // @Get()
 
   @Get('/:userId')
   async getUserById(@Param('userId') userId: string) {

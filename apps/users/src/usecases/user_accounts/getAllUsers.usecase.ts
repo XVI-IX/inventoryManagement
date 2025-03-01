@@ -1,5 +1,6 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 import { IUserRepository } from '../../domain/repositories/users.repository';
+import { cleanUserResponse } from '@app/lib/infrastructure/helpers/helpers';
 
 export class GetAllUsersUseCase {
   private readonly logger: Logger;
@@ -15,7 +16,7 @@ export class GetAllUsersUseCase {
         throw new BadRequestException('Users could not be retrieved');
       }
 
-      return users;
+      return cleanUserResponse(users);
     } catch (error) {
       this.logger.error(error.message);
       throw error;

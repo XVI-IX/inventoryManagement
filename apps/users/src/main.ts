@@ -14,6 +14,8 @@ async function bootstrap() {
     },
   );
 
+  console.log(`Users service is running on: ${envConfig.getUserServicePort()}`);
+
   await app.listen();
 }
 bootstrap();

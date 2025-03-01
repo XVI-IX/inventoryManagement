@@ -11,6 +11,7 @@ import { ArgonModule } from '@app/lib/infrastructure/services/argon/argon.module
 import { PassportModule } from '@app/lib/infrastructure/services/passport/passport.module';
 import { PermissionsGatewayController } from './infrastructure/controllers/RBAC/Permissions/permissions.controller';
 import { RoleGatewayController } from './infrastructure/controllers/RBAC/Roles/roles.controller';
+import { UsersGatewayController } from './infrastructure/controllers/users/accounts/users.controllers';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { RoleGatewayController } from './infrastructure/controllers/RBAC/Roles/r
   ],
   controllers: [
     GatewayController,
+    UsersGatewayController,
     AuthGatewayController,
     PermissionsGatewayController,
     RoleGatewayController,

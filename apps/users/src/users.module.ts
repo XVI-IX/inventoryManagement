@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersGeneralUseCaseProxyModule } from './infrastructure/usecase-proxy/users.generalUseCaseProxy.module';
 import { AuthController } from './infrastructure/controllers/auth.controller';
+import { UsersController } from './infrastructure/controllers/users.controller';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { AuthController } from './infrastructure/controllers/auth.controller';
     // }),
     UsersGeneralUseCaseProxyModule.register(),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UsersController],
   providers: [UsersService],
 })
 export class UsersModule {}
