@@ -17,6 +17,12 @@ export class Products {
   @Column('varchar')
   name: string;
 
+  @Column('varchar')
+  brand: string;
+
+  @Column('varchar')
+  uom: string;
+
   @Column('text')
   description: string;
 

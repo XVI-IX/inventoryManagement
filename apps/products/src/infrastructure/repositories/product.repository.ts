@@ -3,11 +3,15 @@ import {
   Inject,
   Injectable,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { IProductsRepository } from '../../domain/repositories/product.repository';
 import { Repository } from 'typeorm';
 import { Products } from '@app/lib/infrastructure/services/database/entities/products.entity';
-import { IFindOptions } from '@app/lib/domain/adapters/query.interface';
+import {
+  IFindOneOptions,
+  IFindOptions,
+} from '@app/lib/domain/adapters/query.interface';
 
 @Injectable()
 export class ProductRepository implements IProductsRepository {
@@ -36,6 +40,76 @@ export class ProductRepository implements IProductsRepository {
       }
 
       return products;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async findOne(condition: IFindOneOptions<Products>): Promise<Products> {
+    try {
+      const product = await this.productsRepository.findOne({
+        ...condition,
+        relations: {
+          supplier: true,
+        },
+      });
+
+      return product;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async save(entity: Partial<Products>): Promise<Products> {
+    try {
+      const product = await this.productsRepository.save(entity);
+
+      return product;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async update(id: string, entity: Partial<Products>): Promise<any> {
+    try {
+      const product = await this.productsRepository.findOne({
+        where: {
+          id,
+        },
+      });
+
+      if (product) {
+        throw new NotFoundException('Product not found');
+      }
+
+      const updatedProduct = await this.productsRepository.save({
+        ...product,
+        ...entity,
+      });
+
+      return updatedProduct;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async delete(condition: Partial<Products>): Promise<boolean> {
+    try {
+      const product = await this.productsRepository.findOne({
+        where: condition,
+      });
+
+      if (!product) {
+        throw new NotFoundException('Product not found');
+      }
+
+      await this.productsRepository.delete(product);
+
+      return true;
     } catch (error) {
       this.logger.error(error);
       throw error;
