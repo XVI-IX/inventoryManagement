@@ -56,6 +56,9 @@ export class UsersRepository implements IUserRepository {
         skip: condition.skip,
         take: condition.take,
         order: condition.order,
+        relations: {
+          role: true,
+        },
       });
 
       if (!users) {
@@ -71,7 +74,10 @@ export class UsersRepository implements IUserRepository {
 
   async findOne?(condition: IFindOneOptions<Users>): Promise<Users> {
     try {
-      const user = await this.usersRepository.findOne(condition);
+      const user = await this.usersRepository.findOne({
+        ...condition,
+        relations: { role: true },
+      });
 
       return user;
     } catch (error) {

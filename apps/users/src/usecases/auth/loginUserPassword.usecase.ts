@@ -40,6 +40,8 @@ export class LoginUserPasswordUseCase {
         throw new BadRequestException('Invalid Password');
       }
 
+      console.log(existingUser.role);
+
       const payload: IJwtPayload = {
         id: existingUser.id,
         email: existingUser.email,

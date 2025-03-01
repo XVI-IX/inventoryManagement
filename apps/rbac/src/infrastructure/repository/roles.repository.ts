@@ -110,6 +110,9 @@ export class RolesRepository implements IRolesRepository {
     try {
       const role = await this.rolesRepository.findOne({
         where: condition.where,
+        // relations: {
+        //   permissions: true,
+        // }
       });
 
       return role;
