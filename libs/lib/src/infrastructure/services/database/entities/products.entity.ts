@@ -3,11 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Suppliers } from './suppliers.entity';
+import { Category } from './category.entity';
 
 @Entity('products')
 export class Products {
@@ -54,21 +54,4 @@ export class Products {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-
-@Entity('category')
-export class Category {
-  @PrimaryGeneratedColumn()
-  id: string;
-
-  @Column('varchar')
-  name: string;
-
-  @OneToMany(() => Products, (product) => product.category)
-  products: Products[];
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-}
+export { Category };

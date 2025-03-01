@@ -43,7 +43,7 @@ export class AssignPermissionToRoleUseCase {
       ) {
         throw new ConflictException('Role already has permission');
       }
-      const updatedPermissions = roleExists.permissions.push(permissionExists);
+      const updatedPermissions = [...roleExists.permissions, permissionExists];
       const updatedRole = await this.rolesRepository.update(
         {
           id: roleId,

@@ -15,6 +15,7 @@ import { UsersRepository } from 'apps/users/src/infrastructure/repositories/user
 import { GetRoleByIdUseCase } from '../../usecases/roles/getRoleById.usecase';
 import { GetAllRolesWithPermissionUseCase } from '../../usecases/roles/getAllRolesWithPermission.useCase';
 import { AssignPermissionToRoleUseCase } from '../../usecases/permissions/assignPermissionToRole.usecase';
+import { UpdateRoleUseCase } from '../../usecases/roles/updateRole.usecase';
 
 @Module({
   imports: [DatabaseModule, RbacRepositoryModule, UserRepositoryModule],
@@ -130,6 +131,12 @@ export class RBACGeneralUseCaseProxyModule {
                 permissionRepository,
               ),
             ),
+        },
+        {
+          inject: [RolesRepository],
+          provide: RBACGeneralUseCaseProxyModule.UPDATE_ROLE_USE_CASE_PROXY,
+          useFactory: (rolesRepository: RolesRepository) =>
+            new UseCaseProxy(new UpdateRoleUseCase(rolesRepository)),
         },
       ],
       exports: [

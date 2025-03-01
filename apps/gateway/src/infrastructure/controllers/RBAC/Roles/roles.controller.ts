@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 
-@Controller('/roles')
+@Controller('v1/roles')
 export class RoleGatewayController {
   constructor(
     @Inject('RBAC_SERVICE') private readonly roleService: ClientProxy,

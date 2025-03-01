@@ -10,6 +10,7 @@ import { HttpResponse } from '@app/lib/infrastructure/helpers/response.helper';
 import { Suppliers } from '@app/lib/infrastructure/services/database/entities/suppliers.entity';
 import { GetAllSuppliersUseCase } from '../../usecases/getAllSuppliers.usecase';
 import { GetSupplierByIdUseCase } from '../../usecases/getSupplierById.usecase';
+import { IFindOneOptions } from '@app/lib/domain/adapters/query.interface';
 
 @Controller()
 export class SupplierController {
@@ -61,12 +62,16 @@ export class SupplierController {
 
   @MessagePattern('getSupplierById')
   async getSupplierById(
-    @Payload() data: { supplierId: string },
+    @Payload()
+    data: {
+      supplierId: string;
+      options: IFindOneOptions<Suppliers>;
+    },
   ): Promise<ServiceInterface<Suppliers>> {
     try {
       const supplier = await this.getSupplierByIdUseCase
         .getInstance()
-        .execute(data.supplierId);
+        .execute(data.supplierId, data.options);
 
       return HttpResponse.send('Supplier retrieved', supplier);
     } catch (error) {

@@ -3,7 +3,8 @@ import { envConfig } from '../../config/environment.config';
 import { Users } from './entities/user.entity';
 import { Permissions, Roles } from './entities/rbac.entity';
 import { AddPermissions1739668593550 } from './migrations/1739668593550-AddPermissions';
-import { Category, Products } from './entities/products.entity';
+import { Products } from './entities/products.entity';
+import { Category } from './entities/category.entity';
 import { Suppliers } from './entities/suppliers.entity';
 
 export const databaseProviders = [
@@ -17,7 +18,7 @@ export const databaseProviders = [
         username: envConfig.getDatabaseUser(),
         password: envConfig.getDatabasePassword(),
         database: envConfig.getDatabaseName(),
-        entities: [Users, Roles, Permissions, Products, Category, Suppliers],
+        entities: [Users, Roles, Permissions, Products, Suppliers, Category],
         migrations: [AddPermissions1739668593550],
         // synchronize: true,
       });

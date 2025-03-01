@@ -14,6 +14,10 @@ async function bootstrap() {
     },
   );
 
+  console.log(
+    `RBAC service is running on port ${envConfig.getRbacServicePort()}`,
+  );
+
   await app.listen();
 }
 bootstrap();

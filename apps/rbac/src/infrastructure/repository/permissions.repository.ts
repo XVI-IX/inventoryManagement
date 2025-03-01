@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { IPermissionsRepository } from '../../domain/repositories/rbac.repository';
 import { In, Repository } from 'typeorm';
 import { Permissions } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
+import { IFindOptions } from '@app/lib/domain/adapters/query.interface';
 
 @Injectable()
 export class PermissionsRepository implements IPermissionsRepository {
@@ -50,6 +51,21 @@ export class PermissionsRepository implements IPermissionsRepository {
       return permissions;
     } catch (error) {
       this.logger.error(error.message);
+      throw error;
+    }
+  }
+
+  async find(condition: IFindOptions<Permissions>): Promise<Permissions[]> {
+    try {
+      const permissions = await this.permissionsRepository.find(condition);
+
+      if (!permissions) {
+        return [];
+      }
+
+      return permissions;
+    } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
