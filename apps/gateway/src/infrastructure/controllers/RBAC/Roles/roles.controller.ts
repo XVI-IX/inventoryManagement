@@ -11,7 +11,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreateRoleInput } from 'apps/rbac/src/infrastructure/common/schema/rbac.schema';
+import {
+  CreateRoleInput,
+  UpdateRoleInput,
+} from 'apps/rbac/src/infrastructure/common/schema/rbac.schema';
 
 @Controller('v1/roles')
 export class RoleGatewayController {
@@ -40,9 +43,9 @@ export class RoleGatewayController {
   @Put('/:roleId')
   async updateRole(
     @Param('roleId') roleId: string,
-    @Body() data: Partial<Roles>,
+    @Body() data: UpdateRoleInput,
   ) {
-    return this.roleService.send('updateRole', data);
+    return this.roleService.send('updateRole', { roleId, entity: data });
   }
 
   @Post()

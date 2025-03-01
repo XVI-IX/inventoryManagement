@@ -14,6 +14,9 @@ import { ResetPasswordUseCase } from '../../usecases/auth/resetPassword.usecase'
 import { VerifyEmailUseCase } from '../../usecases/auth/verifyEmail.usecase';
 import { RolesRepository } from 'apps/rbac/src/infrastructure/repository/roles.repository';
 import { RbacRepositoryModule } from 'apps/rbac/src/infrastructure/repository/rbac.repository.module';
+import { GetAllUsersUseCase } from '../../usecases/user_accounts/getAllUsers.usecase';
+import { UpdateUserUseCase } from '../../usecases/user_accounts/updateUser.usecase';
+import { GetUserByIdUseCase } from '../../usecases/user_accounts/getUserById.usecase';
 
 @Module({
   imports: [
@@ -31,6 +34,11 @@ export class UsersGeneralUseCaseProxyModule {
   static FORGOT_PASSWORD_USE_CASE_PROXY = 'FORGOT_PASSWORD_USE_CASE_PROXY';
   static RESET_PASSWORD_USE_CASE_PROXY = 'RESET_PASSWORD_USE_CASE_PROXY';
   static VERIFY_EMAIL_USE_CASE_PROXY = 'VERIFY_EMAIL_USE_CASE_PROXY';
+
+  static GET_ALL_USERS_USE_CASE_PROXY = 'GET_ALL_USERS_USE_CASE_PROXY';
+  static UPDATE_USER_USE_CASE_PROXY = 'UPDATE_USER_USE_CASE_PROXY';
+  static DELETE_USER_USE_CASE_PROXY = 'DELETE_USER_USE_CASE_PROXY';
+  static GET_USER_BY_ID_USE_CASE_PROXY = 'GET_USER_BY_ID_USE_CASE_PROXY';
 
   static register(): DynamicModule {
     return {
@@ -93,6 +101,30 @@ export class UsersGeneralUseCaseProxyModule {
           useFactory: (userRepository: UsersRepository) =>
             new UseCaseProxy(new VerifyEmailUseCase(userRepository)),
         },
+        {
+          inject: [UsersRepository],
+          provide: UsersGeneralUseCaseProxyModule.GET_ALL_USERS_USE_CASE_PROXY,
+          useFactory: (usersRepository: UsersRepository) =>
+            new UseCaseProxy(new GetAllUsersUseCase(usersRepository)),
+        },
+        {
+          inject: [UsersRepository],
+          provide: UsersGeneralUseCaseProxyModule.UPDATE_USER_USE_CASE_PROXY,
+          useFactory: (usersRepository: UsersRepository) =>
+            new UseCaseProxy(new UpdateUserUseCase(usersRepository)),
+        },
+        {
+          inject: [UsersRepository],
+          provide: UsersGeneralUseCaseProxyModule.DELETE_USER_USE_CASE_PROXY,
+          useFactory: (usersRepository: UsersRepository) =>
+            new UseCaseProxy(new UpdateUserUseCase(usersRepository)),
+        },
+        {
+          inject: [UsersRepository],
+          provide: UsersGeneralUseCaseProxyModule.GET_USER_BY_ID_USE_CASE_PROXY,
+          useFactory: (usersRepository: UsersRepository) =>
+            new UseCaseProxy(new GetUserByIdUseCase(usersRepository)),
+        },
       ],
       exports: [
         UsersGeneralUseCaseProxyModule.REGISTER_USER_USE_CASE_PROXY,
@@ -100,6 +132,10 @@ export class UsersGeneralUseCaseProxyModule {
         UsersGeneralUseCaseProxyModule.FORGOT_PASSWORD_USE_CASE_PROXY,
         UsersGeneralUseCaseProxyModule.RESET_PASSWORD_USE_CASE_PROXY,
         UsersGeneralUseCaseProxyModule.VERIFY_EMAIL_USE_CASE_PROXY,
+        UsersGeneralUseCaseProxyModule.GET_ALL_USERS_USE_CASE_PROXY,
+        UsersGeneralUseCaseProxyModule.UPDATE_USER_USE_CASE_PROXY,
+        UsersGeneralUseCaseProxyModule.DELETE_USER_USE_CASE_PROXY,
+        UsersGeneralUseCaseProxyModule.GET_USER_BY_ID_USE_CASE_PROXY,
       ],
     };
   }

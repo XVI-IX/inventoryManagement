@@ -10,7 +10,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HttpResponse } from '@app/lib/infrastructure/helpers/response.helper';
 import { ServiceInterface } from '@app/lib/domain/adapters';
 import { Roles } from '@app/lib/infrastructure/services/database/entities/rbac.entity';
-import { CreateRoleInput } from '../common/schema/rbac.schema';
+import { CreateRoleInput, UpdateRoleInput } from '../common/schema/rbac.schema';
 import { CreateRoleUseCase } from '../../usecases/roles/createRole.usecase';
 
 @Controller()
@@ -94,7 +94,7 @@ export class RoleController {
 
   @MessagePattern('updateRole')
   async updateRole(
-    @Payload() data: { roleId: string; entity: Partial<Roles> },
+    @Payload() data: { roleId: string; entity: UpdateRoleInput },
   ): Promise<any> {
     try {
       const role = await this.updateRoleUseCase

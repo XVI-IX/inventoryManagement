@@ -37,16 +37,12 @@ export class UpdateRoleUseCase {
       const resolvedPermissions =
         await this.permissionRepository.findIn(enabledPermissions);
 
+      console.log(resolvedPermissions);
+
       delete entity.permissions;
-      const updatedRole = await this.roleRepository.update(
-        {
-          id: roleId,
-        },
-        {
-          ...entity,
-          permissions: resolvedPermissions,
-        },
-      );
+      Object.assign(roleExists, entity);
+      roleExists.permissions = resolvedPermissions;
+      const updatedRole = await this.roleRepository.save(roleExists);
 
       if (!updatedRole) {
         throw new BadRequestException('Role could not be updated');

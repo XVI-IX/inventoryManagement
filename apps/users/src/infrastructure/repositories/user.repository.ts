@@ -11,6 +11,7 @@ import {
   IFindOneOptions,
   IFindOptions,
 } from '@app/lib/domain/adapters/query.interface';
+import { cleanUserResponse } from '@app/lib/infrastructure/helpers/helpers';
 
 @Injectable()
 export class UsersRepository implements IUserRepository {
@@ -23,17 +24,22 @@ export class UsersRepository implements IUserRepository {
 
   async getUsersWithRole(roleName: string): Promise<Users[]> {
     try {
-      const users = await this.usersRepository
-        .createQueryBuilder('users')
-        .leftJoinAndSelect('role.user', 'role')
-        .where('role.name = :roleName', { roleName })
-        .getMany();
+      const users = await this.usersRepository.find({
+        relations: {
+          role: true,
+        },
+        where: {
+          role: {
+            name: roleName,
+          },
+        },
+      });
 
       if (!users) {
         throw new BadRequestException('Users could not be retrieved');
       }
 
-      return users;
+      return cleanUserResponse(users);
     } catch (error) {
       this.logger.error(error.message);
       throw error;
