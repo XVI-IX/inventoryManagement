@@ -1,7 +1,7 @@
 import { ConflictException, Logger } from '@nestjs/common';
 import { Products } from '@app/lib/infrastructure/services/database/entities/products.entity';
-import { IProductsRepository } from '../domain/repositories/product.repository';
-import { ICategoryRepository } from '../domain/repositories/category.repository';
+import { IProductsRepository } from '../../domain/repositories/product.repository';
+import { ICategoryRepository } from '../../domain/repositories/category.repository';
 
 export class CreateProductUseCase {
   private readonly logger: Logger;
