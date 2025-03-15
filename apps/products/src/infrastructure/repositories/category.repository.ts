@@ -1,8 +1,16 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { ICategoryRepository } from '../../domain/repositories/category.repository';
 import { Repository } from 'typeorm';
 import { Category } from '@app/lib/infrastructure/services/database/entities/category.entity';
-import { IFindOptions } from '@app/lib/domain/adapters/query.interface';
+import {
+  IFindOneOptions,
+  IFindOptions,
+} from '@app/lib/domain/adapters/query.interface';
 
 @Injectable()
 export class CategoryRepository implements ICategoryRepository {
@@ -14,7 +22,7 @@ export class CategoryRepository implements ICategoryRepository {
     this.logger = new Logger(CategoryRepository.name);
   }
 
-  async save(entity: Partial<Category>): Promise<Category> {
+  async save?(entity: Partial<Category>): Promise<Category> {
     try {
       const category = await this.categoryRepository.save(entity);
 
@@ -44,7 +52,7 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
-  async findOne(condition: IFindOptions<Category>): Promise<Category> {
+  async findOne(condition: IFindOneOptions<Category>): Promise<Category> {
     try {
       const category = await this.categoryRepository.findOne({
         where: condition.where,
@@ -60,23 +68,38 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
-  async update(categoryId: string, entity: Partial<Category>): Promise<any> {
+  async update(
+    condition: {
+      id: string;
+    },
+    entity: Partial<Category>,
+  ): Promise<Category> {
     try {
       const category = await this.categoryRepository.update(
-        { id: categoryId },
+        { id: condition.id },
         entity,
       );
 
-      return category;
+      if (!category) {
+        throw new BadRequestException('Category could not be updated');
+      }
+
+      return await this.categoryRepository.findOne({
+        where: {
+          id: condition.id,
+        },
+      });
     } catch (error) {
       this.logger.error(error);
       throw error;
     }
   }
 
-  async delete(categoryId: string): Promise<any> {
+  async delete(condition: { id: string }): Promise<any> {
     try {
-      const category = await this.categoryRepository.delete({ id: categoryId });
+      const category = await this.categoryRepository.delete({
+        id: condition.id,
+      });
 
       return category;
     } catch (error) {

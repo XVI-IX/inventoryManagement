@@ -1,15 +1,18 @@
 import { ConflictException, Logger } from '@nestjs/common';
-import { CreateProductInput } from '../infrastructure/common/schema/products.schema';
 import { Products } from '@app/lib/infrastructure/services/database/entities/products.entity';
 import { IProductsRepository } from '../domain/repositories/product.repository';
+import { ICategoryRepository } from '../domain/repositories/category.repository';
 
 export class CreateProductUseCase {
   private readonly logger: Logger;
-  constructor(private readonly productRepository: IProductsRepository) {
+  constructor(
+    private readonly productRepository: IProductsRepository,
+    private readonly categoryRepository: ICategoryRepository,
+  ) {
     this.logger = new Logger(CreateProductUseCase.name);
   }
 
-  async execute(entity: CreateProductInput): Promise<Products> {
+  async execute(entity: Partial<Products>): Promise<Products> {
     try {
       const product = await this.productRepository.find({
         where: {
@@ -21,6 +24,20 @@ export class CreateProductUseCase {
 
       if (product.length > 0) {
         throw new ConflictException('Product has been added.');
+      }
+
+      if (entity.category) {
+        const category = await this.categoryRepository.findOne({
+          where: {
+            id: entity.category.id,
+          },
+        });
+
+        if (!category) {
+          throw new ConflictException('Category does not exist.');
+        }
+
+        entity.category = category;
       }
 
       const newProduct = await this.productRepository.save(entity);

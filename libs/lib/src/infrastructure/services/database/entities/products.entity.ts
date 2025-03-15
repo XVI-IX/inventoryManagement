@@ -47,15 +47,15 @@ export class Products {
   @ManyToOne(() => Category, (category) => category.products, {
     onDelete: 'SET NULL',
   })
-  category: Category;
+  category?: Category;
 
   @ManyToOne(() => Suppliers, (supplier) => supplier.products, {
     onDelete: 'SET NULL',
   })
-  supplier: Suppliers;
+  supplier?: Suppliers;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;

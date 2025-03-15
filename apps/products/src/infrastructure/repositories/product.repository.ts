@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { IProductsRepository } from '../../domain/repositories/product.repository';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Products } from '@app/lib/infrastructure/services/database/entities/products.entity';
 import {
   IFindOneOptions,
@@ -73,11 +73,14 @@ export class ProductRepository implements IProductsRepository {
     }
   }
 
-  async update(id: string, entity: Partial<Products>): Promise<any> {
+  async update(
+    condition: { id: string },
+    entity: Partial<Products>,
+  ): Promise<any> {
     try {
       const product = await this.productsRepository.findOne({
         where: {
-          id,
+          id: condition.id,
         },
       });
 
@@ -85,10 +88,12 @@ export class ProductRepository implements IProductsRepository {
         throw new NotFoundException('Product not found');
       }
 
-      const updatedProduct = await this.productsRepository.save({
-        ...product,
-        ...entity,
-      });
+      const updatedProduct = await this.productsRepository.update(
+        {
+          id: condition.id,
+        },
+        entity,
+      );
 
       return updatedProduct;
     } catch (error) {
@@ -110,6 +115,25 @@ export class ProductRepository implements IProductsRepository {
       await this.productsRepository.delete(product);
 
       return true;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async findByIds(condition: { id: string[] }): Promise<Products[]> {
+    try {
+      const products = await this.productsRepository.find({
+        where: {
+          id: In(condition.id),
+        },
+      });
+
+      if (!products) {
+        throw new BadRequestException('Products could not be retrieved');
+      }
+
+      return products;
     } catch (error) {
       this.logger.error(error);
       throw error;

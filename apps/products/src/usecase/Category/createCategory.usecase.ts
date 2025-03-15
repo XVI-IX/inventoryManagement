@@ -3,7 +3,7 @@ import { ICategoryRepository } from '../../domain/repositories/category.reposito
 import { CreateCategoryInput } from '../../infrastructure/common/schema/category.schema';
 import { Category } from '@app/lib/infrastructure/services/database/entities/category.entity';
 import { IProductsRepository } from '../../domain/repositories/product.repository';
-import { In } from 'typeorm';
+import { Products } from '@app/lib/infrastructure/services/database/entities/products.entity';
 
 export class CreateCategoryUseCase {
   private readonly logger: Logger;
@@ -16,6 +16,7 @@ export class CreateCategoryUseCase {
 
   async execute(entity: CreateCategoryInput): Promise<Category> {
     try {
+      let products: Products[];
       const categoryExists = await this.categoryRepository.find({
         where: {
           name: entity.name,
@@ -26,19 +27,18 @@ export class CreateCategoryUseCase {
         throw new ConflictException('Category already exists');
       }
 
-      const idMap = entity.products.map((ids) => String(ids));
-
       if (entity.products.length > 0) {
-        const products = await this.productRepository.find({
-          where: {
-            id: In(idMap),
-          },
+        products = await this.productRepository.findByIds({
+          id: entity.products,
         });
       }
 
       delete entity.products;
 
-      const category = await this.categoryRepository.save(entity);
+      const category = await this.categoryRepository.save({
+        name: entity.name,
+        products: products || [],
+      });
 
       if (!category) {
         throw new ConflictException('Category could not be created');
